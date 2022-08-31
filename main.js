@@ -48,18 +48,43 @@ const movementHandler = (e) => {
     }
     console.log(donkey)
 }
+
+
+function detectHit(p1, p2) {
+    // console.log(p1.y + p1.height > p2.y);
+    // console.log(p1.y < p2.y + p2.height);
+    // console.log(p1.x + p1.width > p2.x);
+    // console.log(p1.x < p2.x + p2.width);
+  
+    let hitTest =
+      p1.y + p1.height > p2.y &&
+      p1.y < p2.y + p2.height &&
+      p1.x + p1.width > p2.x &&
+      p1.x < p2.x + p2.width; // {boolean} : if all are true -> hit
+  
+    if (hitTest) {
+      // add 100 points
+      let newScore = Number(score.textContent) + 100;
+      score.textContent = newScore;
+      gameStatus.textContent = 'Shrek is outta here!!'
+      return addNewShrek();
+    } else {
+      return false;
+    }
+  }
 // ====================== GAME PROCESSES ======================= //
 const gameLoop = () => {
     ctx.clearRect(0, 0, game.width, game.height)
     movement.textContent = `X: ${donkey.x}\nY: ${donkey.y}`
     shrek.alive ? shrek.render() : hit = detectHit(donkey, shrek)
     donkey.render()
+    detectHit(donkey, shrek)
 }
 // ====================== PAINT INITIAL SCREEN ======================= //
 // EVENT LISTENERS
 window.addEventListener('DOMContentLoaded', function(e) {
-    shrek = new Crawler(10, 20, '#00ff00', 20, 20)
-    donkey = new Crawler(100, 100, '#ff0000', 40, 80)
+    donkey = new Crawler(10, 20, '#00ff00', 20, 20)
+    shrek = new Crawler(100, 100, '#ff0000', 40, 80)
     const runGame = this.setInterval(gameLoop, 120)
 })
 document.addEventListener('keydown', movementHandler)
